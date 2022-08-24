@@ -13,6 +13,9 @@ class ClassWorkflowObject(object):
         self.workflow = Workflow.objects.filter(field_name=self.field_name, content_type=self._content_type).first()
         self._cached_river_driver = None
 
+    def assign_workflow_id(self, id):
+        self.workflow.id = id
+
     @property
     def _river_driver(self):
         if self._cached_river_driver:

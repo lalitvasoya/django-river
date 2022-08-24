@@ -7,6 +7,7 @@ from river.core.workflowregistry import workflow_registry
 
 # noinspection PyMethodMayBeStatic
 class RiverObject(object):
+    workflow_id = 0
 
     def __init__(self, owner):
         self.owner = owner

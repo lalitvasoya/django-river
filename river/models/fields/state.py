@@ -1,4 +1,5 @@
 import logging
+import inspect
 
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import CASCADE
@@ -23,8 +24,9 @@ LOGGER = logging.getLogger(__name__)
 
 
 class classproperty(object):
-    def __init__(self, getter):
+    def __init__(self, getter, *args, **kwargs):
         self.getter = getter
+        print('---------', *args, **kwargs)
 
     def __get__(self, instance, owner):
         return self.getter(instance) if instance else self.getter(owner)
@@ -52,7 +54,6 @@ class StateField(models.ForeignKey):
         self._add_to_class(cls, self.field_name + "_transitions", GenericRelation('%s.%s' % (Transition._meta.app_label, Transition._meta.object_name)))
 
         if id(cls) not in workflow_registry.workflows:
-            print(cls, '------------')
             self._add_to_class(cls, "river", river)
 
         super(StateField, self).contribute_to_class(cls, name, *args, **kwargs)
@@ -60,7 +61,7 @@ class StateField(models.ForeignKey):
         if id(cls) not in workflow_registry.workflows:
             post_save.connect(_on_workflow_object_saved, self.model, False, dispatch_uid='%s_%s_riverstatefield_post' % (self.model, name))
             post_delete.connect(_on_workflow_object_deleted, self.model, False, dispatch_uid='%s_%s_riverstatefield_post' % (self.model, name))
-        # breakpoint()
+
         workflow_registry.add(self.field_name, cls)
 
     @staticmethod

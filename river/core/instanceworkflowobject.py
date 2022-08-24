@@ -20,11 +20,15 @@ class InstanceWorkflowObject(object):
 
     def __init__(self, workflow_object, field_name):
         self.class_workflow = getattr(workflow_object.__class__.river, field_name)
+        # assign the current workflow to classworkflowobject
+        self.class_workflow.assign_workflow_id(workflow_object.workflow.id)
+
         self.workflow_object = workflow_object
         self.content_type = app_config.CONTENT_TYPE_CLASS.objects.get_for_model(self.workflow_object)
         self.field_name = field_name
-        self.workflow = Workflow.objects.filter(content_type=self.content_type, field_name=self.field_name).first()
         self.initialized = False
+        self.workflow = Workflow.objects.get(id=workflow_object.workflow.id)
+        # self.workflow = Workflow.objects.filter(content_type=self.content_type, field_name=self.field_name).first()
 
     @transaction.atomic
     def initialize_approvals(self):

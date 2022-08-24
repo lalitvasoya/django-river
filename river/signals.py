@@ -29,7 +29,8 @@ class TransitionSignal(object):
         self.field_name = field_name
         self.transition_approval = transition_approval
         self.content_type = ContentType.objects.get_for_model(self.workflow_object.__class__)
-        self.workflow = Workflow.objects.get(content_type=self.content_type, field_name=self.field_name)
+        # self.workflow = Workflow.objects.get(content_type=self.content_type, field_name=self.field_name)
+        self.workflow = Workflow.objects.get(id=self.workflow_object.workflow.id)
 
     def __enter__(self):
         if self.status:
@@ -82,7 +83,8 @@ class ApproveSignal(object):
         self.field_name = field_name
         self.transition_approval = transition_approval
         self.content_type = ContentType.objects.get_for_model(self.workflow_object.__class__)
-        self.workflow = Workflow.objects.get(content_type=self.content_type, field_name=self.field_name)
+        # self.workflow = Workflow.objects.get(content_type=self.content_type, field_name=self.field_name)
+        self.workflow = Workflow.objects.get(id=self.workflow_object.workflow.id)
 
     def __enter__(self):
         for hook in OnApprovedHook.objects.filter(
@@ -134,7 +136,8 @@ class OnCompleteSignal(object):
         self.workflow = getattr(self.workflow_object.river, self.field_name)
         self.status = self.workflow.on_final_state
         self.content_type = ContentType.objects.get_for_model(self.workflow_object.__class__)
-        self.workflow = Workflow.objects.get(content_type=self.content_type, field_name=self.field_name)
+        # self.workflow = Workflow.objects.get(content_type=self.content_type, field_name=self.field_name)
+        self.workflow = Workflow.objects.get(id=self.workflow_object.workflow.id)
 
     def __enter__(self):
         if self.status:
