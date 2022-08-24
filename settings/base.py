@@ -19,6 +19,9 @@ INSTALLED_APPS = (
     'behave_django',
     'codemirror2',
     'river',
+    'test_river',
+    'rest_framework.authtoken',
+    'river_admin'
 )
 
 MIDDLEWARE = [

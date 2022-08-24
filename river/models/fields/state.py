@@ -52,6 +52,7 @@ class StateField(models.ForeignKey):
         self._add_to_class(cls, self.field_name + "_transitions", GenericRelation('%s.%s' % (Transition._meta.app_label, Transition._meta.object_name)))
 
         if id(cls) not in workflow_registry.workflows:
+            print(cls, '------------')
             self._add_to_class(cls, "river", river)
 
         super(StateField, self).contribute_to_class(cls, name, *args, **kwargs)
@@ -59,7 +60,7 @@ class StateField(models.ForeignKey):
         if id(cls) not in workflow_registry.workflows:
             post_save.connect(_on_workflow_object_saved, self.model, False, dispatch_uid='%s_%s_riverstatefield_post' % (self.model, name))
             post_delete.connect(_on_workflow_object_deleted, self.model, False, dispatch_uid='%s_%s_riverstatefield_post' % (self.model, name))
-
+        # breakpoint()
         workflow_registry.add(self.field_name, cls)
 
     @staticmethod

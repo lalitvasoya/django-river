@@ -12,7 +12,7 @@ class Workflow(BaseModel):
         app_label = 'river'
         verbose_name = _("Workflow")
         verbose_name_plural = _("Workflows")
-        unique_together = [("content_type", "field_name")]
+        # unique_together = [("content_type", "field_name")]
 
     objects = WorkflowManager()
 
@@ -24,4 +24,4 @@ class Workflow(BaseModel):
         return self.content_type, self.field_name
 
     def __str__(self):
-        return "%s.%s" % (self.content_type.model, self.field_name)
+        return "%s.%s.%s" % (self.pk, self.content_type.model, self.field_name)
