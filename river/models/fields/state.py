@@ -1,5 +1,4 @@
 import logging
-import inspect
 
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import CASCADE
@@ -26,7 +25,6 @@ LOGGER = logging.getLogger(__name__)
 class classproperty(object):
     def __init__(self, getter, *args, **kwargs):
         self.getter = getter
-        print('---------', *args, **kwargs)
 
     def __get__(self, instance, owner):
         return self.getter(instance) if instance else self.getter(owner)

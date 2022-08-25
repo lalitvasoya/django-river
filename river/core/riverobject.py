@@ -15,6 +15,11 @@ class RiverObject(object):
 
     def __getattr__(self, field_name):
         cls = self.owner if self.is_class else self.owner.__class__
+        if not hasattr(cls, 'workflow'):
+            raise Exception("""
+            model:%s doesn't contains the Workflow(river) model ForeignKey. Which is mandatory 
+            hint: add ForeignKey with the name 'workflow' workflow = models.ForeignKey(Workflow)
+            """ % (cls.__name__,))
         if field_name not in workflow_registry.workflows[id(cls)]:
             raise Exception("Workflow with name:%s doesn't exist for class:%s" % (field_name, cls.__name__))
         if self.is_class:
